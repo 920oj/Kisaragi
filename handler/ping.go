@@ -9,7 +9,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-// PingHandler pingコマンド用Handler
+// PingHandler Handler for Ping command
 func PingHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	switch {
 	case strings.HasPrefix(m.Content, "!ping"):
