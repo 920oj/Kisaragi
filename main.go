@@ -33,6 +33,7 @@ func main() {
 
 	discord.AddHandler(handler.PingHandler)
 	discord.AddHandler(handler.RandomHandler)
+	discord.AddHandler(handler.RemindHandler)
 
 	// Open Websocket
 	err = discord.Open()

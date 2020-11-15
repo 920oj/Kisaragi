@@ -1,11 +1,12 @@
 package handler
 
 import (
-	"github.com/920oj/Kisaragi/client"
-	"github.com/bwmarrin/discordgo"
 	"math/rand"
 	"strings"
 	"time"
+
+	"github.com/920oj/Kisaragi/client"
+	"github.com/bwmarrin/discordgo"
 )
 
 // RandomHandler Handler for Random command

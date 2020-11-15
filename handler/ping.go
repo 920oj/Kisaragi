@@ -17,6 +17,7 @@ func PingHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		timestamp, err := m.Timestamp.Parse()
 		if err != nil {
 			fmt.Println(err)
+			return
 		}
 		client.SendMessage(s, m.ChannelID, "Pong!: "+now.Sub(timestamp).String())
 	}
