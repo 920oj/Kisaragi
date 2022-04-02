@@ -9,28 +9,23 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/joho/godotenv"
-
-	"github.com/920oj/Kisaragi/handler"
 )
 
 var (
 	// TokenPrefix Tokenは先頭にBotという文字が必要
 	TokenPrefix = "Bot "
 	// BotName = "<@777372032333119509>"
-	stopChannel chan bool
 )
 
 func main() {
 	loadEnv()
 	// インスタンス生成
-	discord, err := discordgo.New()
-	discord.Token = TokenPrefix + os.Getenv("DISCORD_TOKEN")
+	discord, err := discordgo.New(TokenPrefix + os.Getenv("DISCORD_TOKEN"))
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	stopChannel = make(chan bool)
-	discord.AddHandler(handler.PingHandler)
+	discord.AddHandler(PingHandler)
 
 	// WebSocket開始
 	err = discord.Open()
@@ -43,7 +38,7 @@ func main() {
 
 	// bot終了用の処理
 	sc := make(chan os.Signal, 1)
-	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM)
+	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
 	discord.Close()
 }
