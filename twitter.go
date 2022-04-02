@@ -55,8 +55,13 @@ func downloadTwitterImgHandler(s *discordgo.Session, m *discordgo.MessageCreate)
 	}
 
 	// ツイートのIDを取得する
+	tw, err := url.Parse(tweetURL)
+	if err != nil {
+		s.ChannelMessageSend(m.ChannelID, "Error: Cannot Parse Tweet URL.")
+		return
+	}
 	rex := regexp.MustCompile(`([^\/]+$)`)
-	tweetID := rex.FindString(tweetURL)
+	tweetID := rex.FindString(tw.Path)
 
 	// Twitter APIのリクエストURLを作成する
 	ajaxURL := fmt.Sprintf("%s?ids=%s%s", twitterAPIURL, tweetID, twitterQuery)
