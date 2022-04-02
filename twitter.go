@@ -62,7 +62,6 @@ func downloadTwitterImgHandler(s *discordgo.Session, m *discordgo.MessageCreate)
 	ajaxURL := fmt.Sprintf("%s?ids=%s%s", twitterAPIURL, tweetID, twitterQuery)
 
 	// Twitter APIを叩く
-	fmt.Println(ajaxURL)
 	twitterAPIBytes, err := RequestAjax(ajaxURL, headers)
 	if err != nil {
 		fmt.Println(err)
@@ -73,13 +72,14 @@ func downloadTwitterImgHandler(s *discordgo.Session, m *discordgo.MessageCreate)
 	var twitterAPIData twitterAPIRes
 	json.Unmarshal(twitterAPIBytes, &twitterAPIData)
 
-	fmt.Println(twitterAPIData)
+	// 画像が紐付いていないとき
 	if len(twitterAPIData.Includes.Media) < 1 {
-		// 画像が紐付いていないとき
 		s.ChannelMessageSend(m.ChannelID, "Error: Images not found.")
 		return
-	} else if len(twitterAPIData.Includes.Media) == 1 {
-		// 画像が1枚のとき
+	}
+
+	// 画像が1枚のとき
+	if len(twitterAPIData.Includes.Media) == 1 {
 		imgURL := twitterAPIData.Includes.Media[0].URL
 		u, err := url.Parse(imgURL)
 		if err != nil {
@@ -95,7 +95,10 @@ func downloadTwitterImgHandler(s *discordgo.Session, m *discordgo.MessageCreate)
 			s.ChannelMessageSend(m.ChannelID, "Error: Download Failed.")
 			return
 		}
-	} else {
+	}
+
+	// 画像が2枚以上のとき
+	if len(twitterAPIData.Includes.Media) > 1 {
 		filepath := fmt.Sprintf("%s/%s/", os.Getenv("TWITTER_DL_DIR"), twitterAPIData.Data[0].ID)
 		for _, v := range twitterAPIData.Includes.Media {
 			imgURL := v.URL
@@ -112,5 +115,6 @@ func downloadTwitterImgHandler(s *discordgo.Session, m *discordgo.MessageCreate)
 			}
 		}
 	}
+
 	s.ChannelMessageSend(m.ChannelID, "Download Successfull.")
 }
