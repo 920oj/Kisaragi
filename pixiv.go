@@ -112,6 +112,7 @@ func DownloadPixivImg(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// イラストか漫画かの判定を行う
 	if pixivAjaxData.Body.PageCount > 1 {
+		// マンガの場合
 		// Pixivのマンガ用API URLを作成する
 		mangaAjaxURL := "https://www.pixiv.net/ajax/illust/" + pixivAjaxData.Body.IllustID + "/pages"
 
@@ -139,6 +140,7 @@ func DownloadPixivImg(s *discordgo.Session, m *discordgo.MessageCreate) {
 			return
 		}
 	} else {
+		// イラストの場合
 		err := downloadPixivIllust(pixivAjaxData, headers)
 		if err != nil {
 			fmt.Println(err)
