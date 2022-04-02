@@ -25,6 +25,7 @@ func main() {
 
 	discord.AddHandler(PingHandler)
 	discord.AddHandler(DownloadPixivImg)
+	discord.AddHandler(downloadTwitterImgHandler)
 
 	// WebSocket開始
 	err = discord.Open()
