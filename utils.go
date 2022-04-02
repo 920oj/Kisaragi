@@ -8,7 +8,7 @@ import (
 )
 
 // DownloadFile ファイルをダウンロードする汎用関数
-func DownloadFile(filepath string, url string, headers http.Header) error {
+func DownloadFile(filepath string, filename string, url string, headers http.Header) error {
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
 	req.Header = headers
 
@@ -20,7 +20,11 @@ func DownloadFile(filepath string, url string, headers http.Header) error {
 
 	defer resp.Body.Close()
 
-	out, err := os.Create(filepath)
+	if _, err := os.Stat(filepath); os.IsNotExist(err) {
+		os.Mkdir(filepath, 0777)
+	}
+
+	out, err := os.Create(filepath + filename)
 	if err != nil {
 		return err
 	}
