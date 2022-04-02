@@ -2,13 +2,11 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/joho/godotenv"
 )
 
 var (
@@ -18,11 +16,11 @@ var (
 )
 
 func main() {
-	loadEnv()
 	// インスタンス生成
 	discord, err := discordgo.New(TokenPrefix + os.Getenv("DISCORD_TOKEN"))
 	if err != nil {
 		fmt.Println(err)
+		os.Exit(0)
 	}
 
 	discord.AddHandler(PingHandler)
@@ -41,12 +39,4 @@ func main() {
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
 	discord.Close()
-}
-
-// loadEnv 環境変数の読み込み
-func loadEnv() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
 }

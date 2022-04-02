@@ -17,7 +17,7 @@ func PingHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Content == "ping" {
 		now := time.Now()
 		timestamp := m.Timestamp
-		p := now.Sub(timestamp).String()
+		p := timestamp.Sub(now).String()
 		s.ChannelMessageSend(m.ChannelID, "pong: "+p)
 	}
 }
